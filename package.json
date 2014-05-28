@@ -1,0 +1,27 @@
+{
+  "name": "color-match",
+  "version": "0.0.0",
+  "description": "color-match ===========",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/index.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/klamping/color-match.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/klamping/color-match/issues"
+  },
+  "homepage": "https://github.com/klamping/color-match",
+  "dependencies": {
+    "color-convert": "~0.3.4",
+    "css-parse": "~1.7.0",
+    "commander": "~2.2.0"
+  },
+  "devDependencies": {
+    "chai": "~1.9.1"
+  }
+}

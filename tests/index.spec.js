@@ -24,3 +24,14 @@ describe('comparison', function () {
         expect(similarity).to.be.true;
     });
 });
+
+describe('parser', function () {
+    it('should create array of color values from a CSS file', function () {
+        var colorVals = match.parseCssFile('./tests/simple.css');
+
+        expect(colorVals).to.equal([
+            [0, 0, 0],
+            [0, 0, 0]
+        ]);
+    });
+});

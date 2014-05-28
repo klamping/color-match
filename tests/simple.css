@@ -1,0 +1,9 @@
+body {
+  background: #eee url('myPath.png') no-repeat;
+  color: #888;
+}
+p, a {
+  font-size: 13px;
+  color: #888;
+  text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);
+}

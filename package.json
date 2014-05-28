@@ -19,7 +19,8 @@
   "dependencies": {
     "color-convert": "~0.3.4",
     "css-parse": "~1.7.0",
-    "commander": "~2.2.0"
+    "commander": "~2.2.0",
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "chai": "~1.9.1"

@@ -82,16 +82,17 @@ var convertToLab = function (color, type) {
 };
 
 var findColors = function (parsed) {
-    var colors = [];
+    var colors = {};
 
     _.each(parsed, function (ruleset) {
         _.each(ruleset.declarations, function (declaration) {
             var value = declaration.value;
+            var line = declaration.position.start.line;
 
             var color;
 
             if (value.match(matches.rgb.hex)) {
-                colors.push(convertToLab(value, 'hex'));
+                color = convertToLab(value, 'hex');
             }
 
             // if a shorthand property, separate out values
@@ -101,6 +102,10 @@ var findColors = function (parsed) {
             // check for rgb colors
 
             // check for hsl colors
+
+            if (color) {
+                colors[line] = color;
+            }
         });
     });
 
@@ -110,7 +115,62 @@ var findColors = function (parsed) {
 exports.parseCssFile = function (filepath) {
     var css = loadCssFile(filepath);
 
-    var parsedCss = parse(css);
+    var parsedCss = parse(css, {
+        position: true
+    });
 
     return findColors(parsedCss.stylesheet.rules);
+};
+
+exports.findDeltaEs = function (colors) {
+    var deltas = {};
+
+    // loop through every color, match against others
+    // if < delta, return result
+    _.each(colors, function (colorA, lineA) {
+        deltas[lineA] = {};
+
+        _.each(colors, function (colorB, lineB) {
+            // don't compare if we've already compared
+            if (lineA < lineB) {
+                var delta = exports.compareColors(colorA, colorB);
+                deltas[lineA][lineB] = delta;
+            }
+        });
+    });
+
+    return deltas;
+};
+
+exports.reportCloseMatches = function (colorDeltas, deltaLimit) {
+    if (!_.isNumber(deltaLimit)) {
+        // set default to defined scientific Just Noticable Difference
+        // @see http://en.wikipedia.org/wiki/Just_noticeable_difference
+        deltaLimit = 2.3;
+    }
+
+    var matches = _.mapValues(colorDeltas, function (color, lineA) {
+        var results = {};
+
+        _.each(color, function (delta, lineB) {
+            results[lineB] = delta !== 0 && delta < deltaLimit;
+        });
+
+        return results;
+    });
+
+    return matches;
+};
+
+exports.kitchenSink = function (filepath, deltaLimit) {
+    // parse CSS file
+    var colors = exports.parseCssFile(filepath);
+
+    // find deltaEs
+    var deltas = exports.findDeltaEs(colors);
+
+    // find matches
+    var matches = exports.reportCloseMatches(deltas, deltaLimit);
+
+    return matches;
 };

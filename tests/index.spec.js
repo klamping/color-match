@@ -26,12 +26,34 @@ describe('comparison', function () {
 });
 
 describe('parser', function () {
-    it('should create array of color values from a CSS file', function () {
-        var colorVals = match.parseCssFile('./tests/simple.css');
+    it('should find a hex value and convert it to LAB', function () {
+        var colorVals = match.parseCssFile('./tests/single-color.css');
 
-        expect(colorVals).to.equal([
-            [0, 0, 0],
-            [0, 0, 0]
-        ]);
+        var converted = [57, 0, 0];
+
+        expect(converted[0]).to.equal(colorVals[0][0]);
+        expect(converted[1]).to.equal(colorVals[0][1]);
+        expect(converted[2]).to.equal(colorVals[0][2]);
+        // expect(colorVals).to.eql(converted);
+    });
+
+    it('should find multiple hex values', function () {
+        var colorVals = match.parseCssFile('./tests/two-hex-color.css');
+
+        var converted = [
+            [57, 0, 0],
+            [30, 76, -103]
+        ];
+
+        expect(converted[0][0]).to.equal(colorVals[0][0]);
+        expect(converted[0][1]).to.equal(colorVals[0][1]);
+        expect(converted[0][2]).to.equal(colorVals[0][2]);
+
+        expect(converted[1][0]).to.equal(colorVals[1][0]);
+        expect(converted[1][1]).to.equal(colorVals[1][1]);
+        expect(converted[1][2]).to.equal(colorVals[1][2]);
+
+
+        expect(colorVals).to.eql(converted);
     });
 });

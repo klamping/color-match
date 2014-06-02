@@ -38,9 +38,9 @@ var loadCssFile = function (filepath) {
 var matches = {
     keyword: colors, // array of keywords
     rgb: {
-        '#': /#([0-9a-f]{3}){1,2}(?=[; ]{1})/,
-        'rgb': /rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)/,
-        'rgba': /(?:(?:(?:rgba)(?=\((?:[0-9\.]+%?,?\s*){4}\)))\s*\(([0-9\.]+%?)(?:,\s*0*\1){2}(?:,\s*[0-9\.]+%?)?\s*\))/
+        hex: /#([0-9a-f]{3}){1,2};?(?![\S]{1})/,
+        rgb: /rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)/,
+        rgba: /(?:(?:(?:rgba)(?=\((?:[0-9\.]+%?,?\s*){4}\)))\s*\(([0-9\.]+%?)(?:,\s*0*\1){2}(?:,\s*[0-9\.]+%?)?\s*\))/
     },
     // hsl(20,0%,  50%)
     // hsl(0, 10%, 100%)
@@ -51,7 +51,34 @@ var matches = {
     hsl: /hsla?\(.+,\s*(?:(?:0%,\s*\d+%)|(?:.+%,\s*(?:10)?0%))(?:,.*)?\)/
 };
 
+var getNumeric = function (color) {
+    return parseInt(color, 16);
+};
+
+var hexToRgb = function (color) {
+    if (color[0] === '#') {
+        color = color.split('#')[1];
+    }
+
+    if (color.length === 3) {
+        color += color;
+    }
+
+    var red = getNumeric(color.substring(0,2));
+    var green = getNumeric(color.substring(2,4));
+    var blue = getNumeric(color.substring(4,6));
+
+    return [red, green, blue];
+};
+
 var convertToLab = function (color, type) {
+    switch (type) {
+        case 'hex':
+            var rgb = hexToRgb(color);
+            return converter.rgb2lab(rgb);
+        default:
+            return false;
+    }
 };
 
 var findColors = function (parsed) {
@@ -61,7 +88,11 @@ var findColors = function (parsed) {
         _.each(ruleset.declarations, function (declaration) {
             var value = declaration.value;
 
-            console.log(value);
+            var color;
+
+            if (value.match(matches.rgb.hex)) {
+                colors.push(convertToLab(value, 'hex'));
+            }
 
             // if a shorthand property, separate out values
 

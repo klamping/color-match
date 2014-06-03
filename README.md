@@ -1,4 +1,4 @@
 color-match
 ===========
 
-Checks two colors to see how close of a match they are
+Reads through a CSS file, finds all colors, and compares each of them to find close matches.

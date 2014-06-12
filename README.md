@@ -1,7 +1,13 @@
 color-match
 ===========
 
-Checks two colors to see how close of a match they are. The goal is to optimize CSS files (i.e. to find "close enough" colors which can just use the same definition).
+## What it does (or will do)
+
+Reads through a CSS file, finds all colors, and compares each of them to find close matches. It then reports the close matches.
+
+## Why it does it
+
+The goal is to optimize CSS files (i.e. to find "close enough" colors which can just use the same definition). Basically, to help prevent [designs that have 250+ shades of blue](http://www.slideshare.net/stubbornella/our-best-practices-are-killing-us).
 
 ## Contributing
 

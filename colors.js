@@ -1,3 +1,5 @@
+// @see http://www.phpied.com/files/rgbcolor/rgbcolor.js
+
 module.exports = {
     aliceblue: 'f0f8ff',
     antiquewhite: 'faebd7',

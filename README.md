@@ -1,3 +1,7 @@
+# If you're looking for an actual implementation of this idea, check out: https://github.com/SlexAxton/css-colorguard
+
+No future work is planned for this repo, as colorguard nailed the idea. 
+
 color-match
 ===========
 
